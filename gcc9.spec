@@ -2951,14 +2951,8 @@ rm -fr %{buildroot}%{gccdir}/install-tools/include
     rm -fr %{buildroot}%{_infodir} %{buildroot}%{_mandir}/man7
     rm -fr %{buildroot}%{_localedir}
     rm -f %{buildroot}%{_libdir}/libgcc_s.so
-    %if %{build_multilib}
-        rm -f %{buildroot}%{multilibdir}/libgcc_s.so
-%if ! %{with cross_bootstrap}
-        %ifarch %{x86_64} aarch64 riscv64
-            rm -f %{buildroot}%{_prefix}/libx32/libgcc_s.so
-        %endif
-%endif
-    %endif
+    rm -f %{buildroot}%{multilibdir}/libgcc_s.so
+    rm -f %{buildroot}%{_prefix}/libx32/libgcc_s.so
     %if !%{build_libgcc}
          rm -f %{buildroot}%{target_libdir}/libgcc_s.so.*
          %if %{build_multilib}
@@ -3139,6 +3133,8 @@ rm -rf %{buildroot}%{_prefix}/libx32
 %if %{build_cxx}
 %find_lang libstdc++
 %endif
+%else
+rm -f %{buildroot}%{_prefix}/libx32/*.so
 %endif
 
 %if %{with crosscompilers}
