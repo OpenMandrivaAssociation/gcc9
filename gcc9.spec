@@ -586,7 +586,9 @@ The %{libgcc} package contains GCC shared libraries for gcc %{branch}
 %package -n %{libgcc_devel}
 Summary:	Development files for libgcc
 Group:		System/Libraries
+%if %{system_gcc}
 Requires:	%{libgcc} = %{EVRD}
+%endif
 
 %description -n %{libgcc_devel}
 The %{libgcc} package contains header files and object files needed to
@@ -1690,6 +1692,7 @@ using REAL*16 and programs using __float128 math.
 ########################################################################
 #-----------------------------------------------------------------------
 
+%if %{system_gcc}
 %if ! %{build_minimal}
 %package -n %{libcc1}
 Summary:	GCC parsing shared library
@@ -1728,6 +1731,7 @@ Static library containing the gcc parser
 %if %{system_gcc}
 %files -n %{libcc1_static_devel}
 %{_libdir}/libcc1.a
+%endif
 %endif
 %endif
 
@@ -2580,7 +2584,11 @@ for i in %{long_targets}; do
 %else
 			--enable-plugin \
 			--enable-shared \
+%if %{system_gcc}
 			--enable-libcc1 \
+%else
+			--disable-libcc1 \
+%endif
 			--enable-lto \
 %endif
 %if !%{build_lto}
@@ -3135,6 +3143,7 @@ rm -rf %{buildroot}%{_prefix}/libx32
 %endif
 %else
 rm -f %{buildroot}%{_prefix}/libx32/*.so
+rm -rf %{buildroot}%{_libdir}/libcc1.so*
 %endif
 
 %if %{with crosscompilers}
