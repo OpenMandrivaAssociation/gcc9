@@ -598,10 +598,12 @@ build applications with libgcc.
 %endif
 %if %{build_multilib}
 %{multilibdir}/libgcc_s.so
+%if ! %{system_gcc}
 %ifarch %{x86_64}
 %if ! %{with cross_bootstrap}
 # 3-fold multilib...
 %{_prefix}/libx32/libgcc_s.so
+%endif
 %endif
 %endif
 %endif
