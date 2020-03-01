@@ -203,7 +203,7 @@
 %define		build_check		0
 %define		build_multilib		0
 %define		build_go		0
-%define		build_lto		1
+%define		build_lto		%{system_gcc}
 %define		build_atomic		1
 %define		build_objc		0
 %define		build_objcxx		0
@@ -775,6 +775,7 @@ including templates and exception handling.
 
 #-----------------------------------------------------------------------
 
+%if %{system_gcc}
 %package -n %{libstdcxx}
 Summary:	GNU Standard C++ library
 Group:		System/Libraries
@@ -881,6 +882,8 @@ Static libraries for the GNU standard C++ library.
 %endif
 
 #-----------------------------------------------------------------------
+# system_gcc
+%endif
 # build_cxx
 %endif
 
@@ -2972,6 +2975,10 @@ rm -fr %{buildroot}%{gccdir}/install-tools/include
 %endif
          %endif
     %endif
+    rm -rf %{buildroot}/lib*/libstdc++* \
+	%{buildroot}%{_prefix}/lib*/libstdc++* \
+	%{buildroot}%{_prefix}/lib/python3.8/site-packages/libstdcxx \
+	%{buildroot}%{_datadir}/gdb/autoload/*/*/libstdc++*
 %endif
 rm -f %{buildroot}%{_libdir}/libiberty.a
 rm -f %{buildroot}%{multilibdir}/libiberty.a
