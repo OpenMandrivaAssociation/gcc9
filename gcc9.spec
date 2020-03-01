@@ -2857,13 +2857,15 @@ pushd %{buildroot}%{_bindir}
     %endif
     %if %{system_gcc}
         ln -sf %{gcc_target_platform}-g++-%{ver} %{gcc_target_platform}-c++
-    %endif
 
-    mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_libdir}
-    mv -f %{buildroot}%{_libdir}/libstdc++.so.*.py \
-        %{buildroot}%{_datadir}/gdb/auto-load%{_libdir}
-    perl -pi -e 's|%{_datadir}/gcc-%{ver}/python|%{py_puresitedir}|;' \
-        %{buildroot}%{_datadir}/gdb/auto-load%{_libdir}/libstdc++.*.py
+        mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{_libdir}
+        mv -f %{buildroot}%{_libdir}/libstdc++.so.*.py \
+            %{buildroot}%{_datadir}/gdb/auto-load%{_libdir}
+        perl -pi -e 's|%{_datadir}/gcc-%{ver}/python|%{py_puresitedir}|;' \
+            %{buildroot}%{_datadir}/gdb/auto-load%{_libdir}/libstdc++.*.py
+    %else
+        rm -f %{buildroot}%{_libdir}/libstdc++.so.*.py
+    %endif
 
     mkdir -p %{buildroot}/%{target_slibdir}
     mv %{buildroot}%{target_libdir}/libstdc++.so.%{stdcxx_major}* \
@@ -2872,11 +2874,15 @@ pushd %{buildroot}%{_bindir}
         %{buildroot}%{target_libdir}/libstdc++.so
 
     %if %{build_multilib}
-        mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{multilibdir}
-        mv -f %{buildroot}%{multilibdir}/libstdc++.so.*.py \
-        %{buildroot}%{_datadir}/gdb/auto-load%{multilibdir}
-        perl -pi -e 's|%{_datadir}/gcc-%{ver}/python|%{py_puresitedir}|;' \
-            %{buildroot}%{_datadir}/gdb/auto-load%{multilibdir}/libstdc++.*.py
+        %if %{system_gcc}
+            mkdir -p %{buildroot}%{_datadir}/gdb/auto-load%{multilibdir}
+            mv -f %{buildroot}%{multilibdir}/libstdc++.so.*.py \
+            %{buildroot}%{_datadir}/gdb/auto-load%{multilibdir}
+            perl -pi -e 's|%{_datadir}/gcc-%{ver}/python|%{py_puresitedir}|;' \
+                %{buildroot}%{_datadir}/gdb/auto-load%{multilibdir}/libstdc++.*.py
+        %else
+            rm -f %{buildroot}%{multilibdir}/libstdc++.so.*.py
+        %endif
 
         mkdir -p %{buildroot}%{multirootlibdir}
         mv %{buildroot}%{multilibdir}/libstdc++.so.%{stdcxx_major}* \
@@ -2964,6 +2970,11 @@ rm -fr %{buildroot}%{gccdir}/install-tools/include
     rm -f %{buildroot}%{_libdir}/libgcc_s.so
     rm -f %{buildroot}%{multilibdir}/libgcc_s.so
     rm -f %{buildroot}%{_prefix}/libx32/libgcc_s.so
+    rm -rf %{buildroot}%{_includedir}/c++ %{buildroot}%{_libdir}/libsupc++.a
+    rm -rf %{buildroot}/lib*/libstdc++* \
+	%{buildroot}%{_prefix}/lib*/libstdc++* \
+	%{buildroot}%{_prefix}/lib/python3.8/site-packages/libstdcxx \
+	%{buildroot}%{_datadir}/gdb/autoload/*/*/libstdc++*
     %if !%{build_libgcc}
          rm -f %{buildroot}%{target_libdir}/libgcc_s.so.*
          %if %{build_multilib}
@@ -2975,10 +2986,6 @@ rm -fr %{buildroot}%{gccdir}/install-tools/include
 %endif
          %endif
     %endif
-    rm -rf %{buildroot}/lib*/libstdc++* \
-	%{buildroot}%{_prefix}/lib*/libstdc++* \
-	%{buildroot}%{_prefix}/lib/python3.8/site-packages/libstdcxx \
-	%{buildroot}%{_datadir}/gdb/autoload/*/*/libstdc++*
 %endif
 rm -f %{buildroot}%{_libdir}/libiberty.a
 rm -f %{buildroot}%{multilibdir}/libiberty.a
