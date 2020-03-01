@@ -99,11 +99,11 @@
 
 #-----------------------------------------------------------------------
 %define		gcc_major		1
-%define		libgcc			%mklibname gcc %{gcc_major}
-%define		multilibgcc		libgcc%{gcc_major}
-%define		libx32gcc		libx32gcc%{gcc_major}
-%define		libgcc_devel		%mklibname gcc -d
-%define		libgcc_static_devel	%mklibname gcc -d -s
+%define		libgcc			%mklibname gcc%{program_suffix} %{gcc_major}
+%define		multilibgcc		libgcc%{program_suffix}_%{gcc_major}
+%define		libx32gcc		libx32gcc%{program_suffix}_%{gcc_major}
+%define		libgcc_devel		%mklibname gcc%{program_suffix} -d
+%define		libgcc_static_devel	%mklibname gcc%{program_suffix} -d -s
 %define		stdcxx_major		6
 %define		libstdcxx		%mklibname stdc++%{program_suffix} %{stdcxx_major}
 %define		libstdcxx_devel		%mklibname stdc++%{program_suffix} -d
