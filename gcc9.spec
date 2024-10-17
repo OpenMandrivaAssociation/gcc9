@@ -318,7 +318,7 @@ Name:		gcc%{package_suffix}
 %endif
 License:	GPLv3+ and GPLv3+ with exceptions and GPLv2+ with exceptions and LGPLv2+ and BSD
 Group:		Development/C
-Url:		http://gcc.gnu.org/
+Url:		https://gcc.gnu.org/
 %define		major %(echo %{ver} |cut -d. -f1)
 %if "%{prerelease}" != ""
 Version:	%{ver}
