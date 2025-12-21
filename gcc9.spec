@@ -416,6 +416,11 @@ Patch1001:	gcc33-pass-slibdir.patch
 # pass libdir around
 Patch1007:	gcc-4.6.2-multi-do-libdir.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	binutils >= 2.20.51.0.2
 BuildRequires:	dejagnu
 BuildRequires:	elfutils-devel >= 0.147
